@@ -29,7 +29,7 @@ class LocalDataSource {
         password TEXT,
         isActive INTEGER,
         createdAt DATETIME,
-        updatedAt DATETIME,
+        updatedAt DATETIME
       )
       ''',
     );
@@ -131,22 +131,29 @@ class LocalDataSource {
     );
   }
 
-  Future<void> registerUser(String username, String mail, String password) async {
-    final hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-    final user = User(
-      username: username,
-      mail: mail,
-      password: hashedPassword,
-      isActive: true,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    );
-    final db = await database;
-    await db.insert(
-      'users',
-      user.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+  Future<bool> registerUser(String username, String mail, String password) async {
+    try {
+      final hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+      final user = User(
+        username: username,
+        mail: mail,
+        password: hashedPassword,
+        isActive: true,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+      final db = await database;
+      await db.insert(
+        'users',
+        user.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+      return true;
+    } catch (e) {
+      print('Erro durante o registro do usuário: $e');
+      return false;
+    }
   }
 
   Future<bool> verifyLogin(String mail, String password) async {
@@ -178,9 +185,9 @@ class LocalDataSource {
         username: maps[0]['username'],
         mail: maps[0]['mail'],
         password: maps[0]['password'],
-        isActive: maps[0]['isActive'],
-        createdAt: maps[0]['createdAt'],
-        updatedAt: maps[0]['updatedAt'],
+        isActive: maps[0]['isActive'] == 1 ? true : false,
+        createdAt: DateTime.parse(maps[0]['createdAt']),
+        updatedAt: DateTime.parse(maps[0]['updatedAt']),
       );
     }
     return null;

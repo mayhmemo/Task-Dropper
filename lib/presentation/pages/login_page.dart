@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:task_dropper/data/models/user_model.dart';
 import 'package:task_dropper/presentation/pages/home_page.dart';
 import 'package:task_dropper/data/datasources/local_source.dart';
+import 'package:task_dropper/presentation/pages/initial_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -114,9 +116,10 @@ class _LoginPageState extends State<LoginPage> {
                   bool loginSuccess = await _localDataSource.verifyLogin(_emailController.text, _passwordController.text);
 
                   if (loginSuccess) {
+                    User? user = await _localDataSource.getUserByMail(_emailController.text);
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(builder: (context) => Initial_page(userId: user?.id)),
                     );
                   } else {
                     final snackBar = SnackBar(content: Text('Usuário não encontrado na base de dados!'), backgroundColor: Colors.red);

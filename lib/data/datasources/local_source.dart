@@ -67,12 +67,11 @@ class LocalDataSource {
 
   Future<void> insertTask(String title, String description, int userId) async {
     final task = Task(
-      title: title,
-      description: description,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      userId: userId
-    );
+        title: title,
+        description: description,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        userId: userId);
     final db = await database;
     await db.insert(
       'tasks',
@@ -85,7 +84,7 @@ class LocalDataSource {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'tasks',
-      where: 'userId = ?',
+      where: 'userId = ? and isDeleted <> 1',
       whereArgs: [userId],
     );
     return List.generate(maps.length, (i) {
@@ -111,9 +110,7 @@ class LocalDataSource {
     final db = await database;
     await db.update(
       'tasks',
-      {
-        'isDeleted': status ? 1 : 0
-      },
+      {'isDeleted': status ? 1 : 0},
       where: 'id = ?',
       whereArgs: [taskId],
     );
@@ -123,15 +120,14 @@ class LocalDataSource {
     final db = await database;
     await db.update(
       'tasks',
-      {
-        'isCompleted': status ? 1 : 0
-      },
+      {'isCompleted': status ? 1 : 0},
       where: 'id = ?',
       whereArgs: [taskId],
     );
   }
 
-  Future<bool> registerUser(String username, String mail, String password) async {
+  Future<bool> registerUser(
+      String username, String mail, String password) async {
     try {
       final hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
       final user = User(
@@ -215,9 +211,7 @@ class LocalDataSource {
 
     await db.update(
       'users',
-      {
-        'isActive': status ? 1 : 0
-      },
+      {'isActive': status ? 1 : 0},
       where: 'id = ?',
       whereArgs: [userId],
     );

@@ -69,10 +69,16 @@ class _InitialPageState extends State<Initial_page> {
     _refreshTasks(widget.userId!);
   }
 
-  void _deleteTask(int id) async {
-    await _localDataSource.changeTaskDeletedStatus(id, true);
-    _refreshTasks(widget.userId!);
+  void _deleteTask(int? id) async {
+    if (id != null) {
+      print("Deleting task with ID: $id");
+      await _localDataSource.changeTaskDeletedStatus(id);
+      _refreshTasks(widget.userId!);
+    }
   }
+
+  
+
 
   void showForm(int? id) {
     if (id != null) {
@@ -142,7 +148,9 @@ class _InitialPageState extends State<Initial_page> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cadastro de tarefas"),
+        title: Center(
+          child:
+          const Text("Cadastro de tarefas")),
       ),
       body: _isLoading
           ? CircularProgressIndicator()
@@ -152,8 +160,14 @@ class _InitialPageState extends State<Initial_page> {
                 color: Colors.blue,
                 margin: const EdgeInsets.all(15),
                 child: ListTile(
-                  title: Text(_listTasks[index].title),
-                  subtitle: Text(_listTasks[index].description),
+                  title: Text(_listTasks[index].title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold)),
+                  subtitle: Text(_listTasks[index].description,
+                   style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold)),
                   trailing: SizedBox(
                     width: 100,
                     child: Row(
@@ -166,7 +180,7 @@ class _InitialPageState extends State<Initial_page> {
                         IconButton(
                           icon: Icon(Icons.delete),
                           color: Colors.white,
-                          onPressed: () => _deleteTask(_listTasks[index].id!),
+                          onPressed: () => _deleteTask(_listTasks[index].id),
                         ),
                       ],
                     ),

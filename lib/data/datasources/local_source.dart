@@ -107,16 +107,15 @@ class LocalDataSource {
     );
   }
 
-  Future<void> changeTaskDeletedStatus(int taskId, bool status) async {
+  Future<void> changeTaskDeletedStatus(int taskId) async {
     final db = await database;
-    await db.update(
-      'tasks',
-      {
-        'isDeleted': status ? 1 : 0
-      },
-      where: 'id = ?',
-      whereArgs: [taskId],
-    );
+    print("Changing task status - ID: $taskId");
+    await db.delete(
+    'tasks',
+    where: 'id = ?',
+    whereArgs: [taskId],
+  );
+
   }
 
   Future<void> changeTaskCompletedStatus(int taskId, bool status) async {

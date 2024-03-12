@@ -84,7 +84,7 @@ class LocalDataSource {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'tasks',
-      where: 'userId = ?',
+      where: 'userId = ? and isDeleted <> 1',
       whereArgs: [userId],
     );
     return List.generate(maps.length, (i) {

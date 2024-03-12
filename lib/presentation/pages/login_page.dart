@@ -7,7 +7,7 @@ import 'package:task_dropper/data/datasources/local_source.dart';
 import 'package:task_dropper/presentation/pages/initial_page.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -16,8 +16,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final LocalDataSource _localDataSource = LocalDataSource();
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.white70, Colors.white38],
+            colors: const [Colors.white70, Colors.white38],
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
           ),
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                     User? user = await _localDataSource.getUserByMail(_emailController.text);
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => Initial_page(userId: user?.id)),
+                      MaterialPageRoute(builder: (context) => InitialPage(userId: user?.id)),
                     );
                   } else {
                     final snackBar = SnackBar(content: Text('Usuário não encontrado na base de dados!'), backgroundColor: Colors.red);

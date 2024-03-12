@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:task_dropper/data/datasources/local_source.dart';
 import 'package:task_dropper/data/models/task_model.dart';
 
-class Initial_page extends StatefulWidget {
+class InitialPage extends StatefulWidget {
   final int? userId;
 
-  Initial_page({required this.userId});
+  const InitialPage({super.key, required this.userId});
 
   @override
-  State<Initial_page> createState() => _InitialPageState();
+  State<InitialPage> createState() => _InitialPageState();
 }
 
-class _InitialPageState extends State<Initial_page> {
+class _InitialPageState extends State<InitialPage> {
   final LocalDataSource _localDataSource = LocalDataSource();
   List<Task> _listTasks = [];
 
@@ -38,9 +38,6 @@ class _InitialPageState extends State<Initial_page> {
   final TextEditingController _updatedAtController = TextEditingController();
 
   Future<void> _insertTask() async {
-    final createdAt = DateTime.now();
-    final updatedAt = DateTime.now();
-
     await _localDataSource.insertTask(
       _titleTaskController.text,
       _descriptionTaskController.text,
@@ -71,8 +68,7 @@ class _InitialPageState extends State<Initial_page> {
 
   void _deleteTask(int? id) async {
     if (id != null) {
-      print("Deleting task with ID: $id");
-      await _localDataSource.changeTaskDeletedStatus(id);
+      await _localDataSource.changeTaskDeletedStatus(id, true);
       _refreshTasks(widget.userId!);
     }
   }

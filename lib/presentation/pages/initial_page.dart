@@ -32,19 +32,24 @@ class _InitialPageState extends State<InitialPage> {
   }
 
   final TextEditingController _titleTaskController = TextEditingController();
-  final TextEditingController _descriptionTaskController =
-      TextEditingController();
-  final TextEditingController _createdAtController = TextEditingController();
+  final TextEditingController _descriptionTaskController = TextEditingController();
   final TextEditingController _updatedAtController = TextEditingController();
 
   Future<void> _insertTask() async {
-    await _localDataSource.insertTask(
+    if(_titleTaskController.text != null && _titleTaskController.text != ""){
+      await _localDataSource.insertTask(
       _titleTaskController.text,
       _descriptionTaskController.text,
-      widget.userId!,
-      
+      widget.userId!,      
     );
+    final snackBar = SnackBar(content: Text('Task adicionada com sucesso!'), backgroundColor: Colors.green);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
     _refreshTasks(widget.userId!);
+    }else{
+      final snackBar = SnackBar(content: Text('Preencha corretamente os campos'), backgroundColor: Colors.red);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      _refreshTasks(widget.userId!);
+    }
   }
 
   Future<void> _updateTask(int id) async {
@@ -66,15 +71,12 @@ class _InitialPageState extends State<InitialPage> {
     _refreshTasks(widget.userId!);
   }
 
-  void _deleteTask(int? id) async {
+   void _deleteTask(int? id) async {
     if (id != null) {
       await _localDataSource.changeTaskDeletedStatus(id, true);
       _refreshTasks(widget.userId!);
     }
   }
-
-  
-
 
   void showForm(int? id) {
     if (id != null) {
@@ -82,7 +84,6 @@ class _InitialPageState extends State<InitialPage> {
       _titleTaskController.text = existingTask.title;
       _descriptionTaskController.text = existingTask.description;
     } else {
-      _createdAtController.text = DateTime.now().toLocal().toString();
       _updatedAtController.text = '';
     }
 
@@ -146,7 +147,13 @@ class _InitialPageState extends State<InitialPage> {
       appBar: AppBar(
         title: Center(
           child:
-          const Text("Cadastro de tarefas")),
+          const Text("Cadastro de tarefas",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+          )),
+        backgroundColor: Colors.blue,
       ),
       body: _isLoading
           ? CircularProgressIndicator()
@@ -188,7 +195,7 @@ class _InitialPageState extends State<InitialPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => showForm(null),
-      ),
-    );
+        foregroundColor: Colors.white),
+      );
   }
 }

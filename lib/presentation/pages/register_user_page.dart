@@ -143,24 +143,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
               height: 40.0,
               padding: EdgeInsets.symmetric(horizontal: 40),
               child: ElevatedButton(
-                onPressed: () async {
-                  bool regiserUserSuccess = await _localDataSource.registerUser(_userController.text, _emailController.text, _passwordController.text);
-
-                  if (regiserUserSuccess) {
-                    final snackBar = SnackBar(content: Text('Usuário registrado com sucesso!'), backgroundColor: Colors.green);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                    Future.delayed(Duration(seconds: 2), () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    });
-                  } else {
-                    final snackBar = SnackBar(content: Text('Falha ao tentar registrar usuário!'), backgroundColor: Colors.red);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                  
+                onPressed: () { 
+                  registerUser();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -183,4 +167,24 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
       
     );
   }
+
+  void registerUser () async {
+    bool regiserUserSuccess = await _localDataSource.registerUser(_userController.text, _emailController.text, _passwordController.text);
+
+    if (regiserUserSuccess) {
+      final snackBar = SnackBar(content: Text('Usuário registrado com sucesso!'), backgroundColor: Colors.green);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      });
+    } else {
+      final snackBar = SnackBar(content: Text('Falha ao tentar registrar usuário!'), backgroundColor: Colors.red);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
 }

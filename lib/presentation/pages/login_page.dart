@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:task_dropper/presentation/pages/home_page.dart';
 import 'package:task_dropper/data/datasources/local_source.dart';
+import 'package:task_dropper/presentation/pages/register_user_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -110,18 +111,8 @@ class _LoginPageState extends State<LoginPage> {
               height: 40.0,
               padding: EdgeInsets.symmetric(horizontal: 40),
               child: ElevatedButton(
-                onPressed: () async {
-                  bool loginSuccess = await _localDataSource.verifyLogin(_emailController.text, _passwordController.text);
-
-                  if (loginSuccess) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  } else {
-                    final snackBar = SnackBar(content: Text('Usuário não encontrado na base de dados!'), backgroundColor: Colors.red);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
+                onPressed: () {
+                  executeLogin();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -138,10 +129,64 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+
+            SizedBox(height: 40),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              child: Container(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterUserPage()),
+                    );
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Não tem uma conta ? ",
+                      style: TextStyle(
+                        color: Colors.black87
+                      ),
+                      children: <TextSpan> [
+                        TextSpan(
+                          text: "crie aqui",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.none
+                          )
+                        )
+                      ]
+                    ),
+                  )
+                ) ,
+              )
+            )
+
           ],
         ),
       ),
       
     );
   }
+
+  void executeLogin () async {
+    bool loginSuccess = await _localDataSource.verifyLogin(_emailController.text, _passwordController.text);
+
+    if (loginSuccess) {
+      final snackBar = SnackBar(content: Text('Login efetuado com sucesso!'), backgroundColor: Colors.green);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      });
+    } else {
+      final snackBar = SnackBar(content: Text('Usuário não encontrado na base de dados!'), backgroundColor: Colors.red);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
 }

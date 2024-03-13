@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:task_dropper/presentation/pages/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_dropper/presentation/pages/register_user_page.dart';
 
 class SplashScreenPage extends StatefulWidget {
   SplashScreenPage({super.key});
@@ -22,12 +20,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPr
 
     Future.delayed( Duration(seconds: 5), () async {
       WidgetsFlutterBinding.ensureInitialized();
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
-
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => isFirstTime ? RegisterUserPage() : LoginPage(), 
+          builder: (_) => LoginPage(), 
         )
       );
     });

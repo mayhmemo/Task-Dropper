@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:task_dropper/data/datasources/local_source.dart';
 import 'package:task_dropper/presentation/pages/login_page.dart';
+import 'package:task_dropper/utils/snackbar.utils.dart';
 
 class RegisterUserPage extends StatefulWidget {
   RegisterUserPage({super.key});
@@ -13,6 +14,7 @@ class RegisterUserPage extends StatefulWidget {
 
 class _RegisterUserPageState extends State<RegisterUserPage> {
   final LocalDataSource _localDataSource = LocalDataSource();
+  final SnackbarUtils _snackbarUtils = SnackbarUtils();
 
   TextEditingController _userController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -36,7 +38,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
           ),
 
           SizedBox(height: 30),
-          
+
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40),
             child: Padding(
@@ -71,7 +73,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    labelText: 'Email',
+                    labelText: 'E-mail',
                     prefixIcon: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Icon(Icons.mail),
@@ -150,10 +152,28 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
   }
 
   void registerUser () async {
+    if (!_userController.text.isNotEmpty) {
+      final snackBar = _snackbarUtils.showCustomSnackbar('Digite um usuário', Colors.red, Colors.white);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
+
+    if (!_emailController.text.isNotEmpty) {
+      final snackBar = _snackbarUtils.showCustomSnackbar('Digite um e-mail', Colors.red, Colors.white);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
+
+    if (!_passwordController.text.isNotEmpty) {
+      final snackBar = _snackbarUtils.showCustomSnackbar('Digite uma senha', Colors.red, Colors.white);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
+
     bool regiserUserSuccess = await _localDataSource.registerUser(_userController.text, _emailController.text, _passwordController.text);
 
     if (regiserUserSuccess) {
-      final snackBar = SnackBar(content: Text('Usuário registrado com sucesso!'), backgroundColor: Colors.green);
+      final snackBar = _snackbarUtils.showCustomSnackbar('Usuário registrado com successo!', Colors.green, Colors.white);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       Future.delayed(Duration(seconds: 1), () {
@@ -163,7 +183,7 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
         );
       });
     } else {
-      final snackBar = SnackBar(content: Text('Falha ao tentar registrar usuário!'), backgroundColor: Colors.red);
+      final snackBar = _snackbarUtils.showCustomSnackbar('Falha ao tentar registrar usuário!', Colors.red, Colors.white);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }

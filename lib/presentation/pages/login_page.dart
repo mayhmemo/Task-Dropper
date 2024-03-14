@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:task_dropper/presentation/pages/home_page.dart';
 import 'package:task_dropper/data/datasources/local_source.dart';
 import 'package:task_dropper/presentation/pages/register_user_page.dart';
+import 'package:task_dropper/utils/snackbar.utils.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -14,9 +15,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final LocalDataSource _localDataSource = LocalDataSource();
+  final SnackbarUtils _snackbarUtils = SnackbarUtils();
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
+  bool _passwordInvisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.black54,
+              color: Colors.white,
             ),
           ),
       
@@ -40,26 +44,20 @@ class _LoginPageState extends State<LoginPage> {
       
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.only(left: 15.0, right: 8.0),
-                    child: Icon(Icons.lock),
-                  ),
-                  labelText: "E-mail",
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black54),
-                    borderRadius: BorderRadius.circular(30.0),
+            child: Padding(
+              padding: EdgeInsets.only(left: 3.0),
+              child: SizedBox(
+                child: TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    labelText: 'E-mail',
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Icon(Icons.mail),
+                    ),
                   ),
                 ),
               ),
@@ -70,27 +68,36 @@ class _LoginPageState extends State<LoginPage> {
       
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.only(left: 15.0, right: 8.0),
-                    child: Icon(Icons.lock),
-                  ),
-                  labelText: "Senha",
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black54),
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
+            child: Padding(
+              padding: EdgeInsets.only(left: 3.0),
+              child: SizedBox(
+                child: TextField(
+                  obscureText: _passwordInvisible,
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      labelText: 'Senha',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Icon(Icons.lock),
+                      ),
+                      suffixIcon: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: IconButton(
+                          icon: Icon(
+                            _passwordInvisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordInvisible = !_passwordInvisible;
+                            });
+                          },
+                        ),
+                      )),
                 ),
               ),
             ),
@@ -138,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                   text: TextSpan(
                     text: "Não tem uma conta ? ",
                     style: TextStyle(
-                      color: Colors.black87
+                      color: Colors.white
                     ),
                     children: <TextSpan> [
                       TextSpan(
@@ -161,10 +168,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void executeLogin () async {
+    if (!_emailController.text.isNotEmpty) {
+      final snackBar = _snackbarUtils.showCustomSnackbar('Digite o e-mail do seu usuário', Colors.red, Colors.white);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
+
+    if (!_passwordController.text.isNotEmpty) {
+      final snackBar = _snackbarUtils.showCustomSnackbar('Digite a senha do seu usuário', Colors.red, Colors.white);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return;
+    }
+
     bool loginSuccess = await _localDataSource.verifyLogin(_emailController.text, _passwordController.text);
 
     if (loginSuccess) {
-      final snackBar = SnackBar(content: Text('Login efetuado com sucesso!'), backgroundColor: Colors.green);
+      final snackBar = _snackbarUtils.showCustomSnackbar('Login efetuado com sucesso!', Colors.green, Colors.white);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
       Future.delayed(Duration(seconds: 1), () {
@@ -174,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       });
     } else {
-      final snackBar = SnackBar(content: Text('Usuário não encontrado na base de dados!'), backgroundColor: Colors.red);
+      final snackBar = _snackbarUtils.showCustomSnackbar('Usuário não encontrado na base de dados!', Colors.red, Colors.white);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }

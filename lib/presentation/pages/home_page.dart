@@ -42,11 +42,11 @@ class _HomePageState extends State<HomePage> {
       _descriptionTaskController.text,
       widget.userId!,      
     );
-    final snackBar = SnackBar(content: Text('Task adicionada com sucesso!'), backgroundColor: Colors.green);
+    const snackBar = SnackBar(content: Text('Task adicionada com sucesso!'), backgroundColor: Colors.green);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
     _refreshTasks(widget.userId!);
     }else{
-      final snackBar = SnackBar(content: Text('Preencha corretamente os campos'), backgroundColor: Colors.red);
+      const snackBar = SnackBar(content: Text('Preencha corretamente os campos'), backgroundColor: Colors.red);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       _refreshTasks(widget.userId!);
     }
@@ -145,16 +145,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
           child:
-          const Text("Cadastro de tarefas",
+          Text("Cadastro de tarefas",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
           )),
            leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
                           context,
@@ -164,29 +164,29 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: _isLoading
-          ? CircularProgressIndicator()
+          ? const CircularProgressIndicator()
           : ListView.builder(
               itemCount: _listTasks.length,
               itemBuilder: (context, index) => Card(
                 margin: const EdgeInsets.all(15),
                 child: ListTile(
                   title: Text(_listTasks[index].title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold)),
                   subtitle: Text(_listTasks[index].description,
-                   style: TextStyle(
+                   style: const TextStyle(
                     fontWeight: FontWeight.bold)),
                   trailing: SizedBox(
                     width: 100,
                     child: Row(
                       children: [
                         IconButton(
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                           color: Colors.white,
                           onPressed: () => showForm(_listTasks[index].id),
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(Icons.delete),
                           onPressed: () => _deleteTask(_listTasks[index].id),
                         ),
                       ],
@@ -197,9 +197,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
         onPressed: () => showForm(null),
-        foregroundColor: Colors.white),
+        foregroundColor: Colors.white,
+        child: const Icon(Icons.add)),
       );
   }
 }

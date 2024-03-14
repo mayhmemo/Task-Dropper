@@ -39,28 +39,19 @@ class _SplashScreenPageState extends State<SplashScreenPage> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white70, Colors.white38],
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft
-          ),
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.task,
               size: 80,
-              color: Colors.black87,
             ),
             SizedBox(height: 20),
             Text('Gerenciador de Tarefas', 
               style: TextStyle(
                 fontStyle: FontStyle.italic,
-                color: Colors.black87,
                 fontSize: 32
               ),
             )

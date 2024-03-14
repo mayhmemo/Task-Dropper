@@ -18,153 +18,134 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+  bool _passwordInvisible = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white70, Colors.white38],
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: 20),
+          Text(
+            "OLÁ, VAMOS CADASTRAR SEU USUÁRIO",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            
-            Text(
-              "OLÁ, VAMOS CADASTRAR SEU USUÁRIO",
-              style: TextStyle(
-                fontWeight: FontWeight.bold, 
-                fontSize: 24,
-                color: Colors.black54
-              ),
-            ),
 
-            SizedBox(height: 30),
-
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 3.0),
-                  child: TextField(
-                    controller: _userController,
-                    decoration: InputDecoration (
+          SizedBox(height: 30),
+          
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Padding(
+              padding: EdgeInsets.only(left: 3.0),
+              child: SizedBox(
+                child: TextField(
+                  controller: _userController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      labelText: 'Usuário',
                       prefixIcon: Padding(
-                        padding: EdgeInsets.only(left: 15.0, right: 8.0),
-                        child: Icon(Icons.person),
-                      ),
-                      labelText: "Usuário",
-                      labelStyle: TextStyle(
-                        color: Colors.black
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black54),
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                  ),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Icon(Icons.person),
+                    )),
                 ),
               ),
             ),
+          ),
 
-            SizedBox(height: 30),
+          SizedBox(height: 30),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(30),
-                ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Padding(
+              padding: EdgeInsets.only(left: 3.0),
+              child: SizedBox(
                 child: TextField(
-                  controller:  _emailController,
-                  decoration: InputDecoration (
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    labelText: 'Email',
                     prefixIcon: Padding(
-                      padding: EdgeInsets.only(left: 15.0, right: 8.0),
-                      child: Icon(Icons.lock),
-                    ),
-                    labelText: "E-mail",
-                    labelStyle: TextStyle(
-                      color: Colors.black
-                    ),
-                    enabledBorder:  OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black54),
-                      borderRadius: BorderRadius.circular(30.0),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Icon(Icons.mail),
                     ),
                   ),
                 ),
               ),
             ),
+          ),
 
-            SizedBox(height: 30),
+          SizedBox(height: 30),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(30),
-                ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: Padding(
+              padding: EdgeInsets.only(left: 3.0),
+              child: SizedBox(
                 child: TextField(
-                  controller:  _passwordController,
-                  decoration: InputDecoration (
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.only(left: 15.0, right: 8.0),
-                      child: Icon(Icons.lock),
-                    ),
-                    labelText: "Senha",
-                    labelStyle: TextStyle(
-                      color: Colors.black
-                    ),
-                    enabledBorder:  OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black87),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
+                  obscureText: _passwordInvisible,
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      labelText: 'Senha',
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Icon(Icons.lock),
+                      ),
+                      suffixIcon: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: IconButton(
+                          icon: Icon(
+                            _passwordInvisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordInvisible = !_passwordInvisible;
+                            });
+                          },
+                        ),
+                      )),
                 ),
               ),
             ),
+          ),
 
-            SizedBox(height: 30),
+          SizedBox(height: 30),
 
-            Container(
-              width: double.infinity,
-              height: 40.0,
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: ElevatedButton(
-                onPressed: () { 
-                  registerUser();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
-                child: Text(
-                  'Registrar',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.white
-                  ),
+          Container(
+            width: double.infinity,
+            height: 40.0,
+            padding: EdgeInsets.symmetric(horizontal: 40),
+            child: ElevatedButton(
+              onPressed: () { 
+                registerUser();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
               ),
+              child: Text(
+                'Registrar',
+                style: TextStyle(fontSize: 17, color: Colors.white),
+              ),
             ),
-          ],
-        ),
+          ),
+
+        ],
       ),
-      
     );
   }
 

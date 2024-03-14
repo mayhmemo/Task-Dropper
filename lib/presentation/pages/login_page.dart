@@ -116,7 +116,6 @@ class _LoginPageState extends State<LoginPage> {
                 executeLogin();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),

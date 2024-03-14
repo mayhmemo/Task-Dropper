@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
 
                 Navigator.of(context).pop();
               },
-              child: Text(id == null ? 'Create Task' : 'Update Task'),
+              child: Text(id == null ? 'Create Task' : 'Update Task', style: const TextStyle(color: Colors.white),),
             )
           ],
         ),

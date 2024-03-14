@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.dark(),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.green), // Set your default button color here
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.purple), // Set your default button color here
           ),
         ),
       ),

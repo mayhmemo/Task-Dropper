@@ -6,7 +6,7 @@ import 'package:task_dropper/presentation/pages/home_page.dart';
 import 'package:task_dropper/data/datasources/local_source.dart';
 import 'package:task_dropper/presentation/pages/register_user_page.dart';
 import 'package:task_dropper/utils/snackbar.utils.dart';
-
+import 'package:task_dropper/data/models/user_model.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -188,11 +188,12 @@ class _LoginPageState extends State<LoginPage> {
     if (loginSuccess) {
       final snackBar = _snackbarUtils.showCustomSnackbar('Login efetuado com sucesso!', Colors.green, Colors.white);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      User? user = await _localDataSource.getUserByMail(_emailController.text);
 
       Future.delayed(Duration(seconds: 1), () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage(userId: user?.id)),
         );
       });
     } else {

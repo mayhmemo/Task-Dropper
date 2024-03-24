@@ -1,13 +1,15 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:task_dropper/data/models/user_model.dart';
 import 'package:task_dropper/presentation/pages/home_page.dart';
 import 'package:task_dropper/data/datasources/local_source.dart';
 import 'package:task_dropper/presentation/pages/register_user_page.dart';
 import 'package:task_dropper/utils/snackbar.utils.dart';
+import 'package:task_dropper/data/models/user_model.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -17,8 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   final LocalDataSource _localDataSource = LocalDataSource();
   final SnackbarUtils _snackbarUtils = SnackbarUtils();
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   bool _passwordInvisible = true;
 
@@ -114,7 +116,6 @@ class _LoginPageState extends State<LoginPage> {
                 executeLogin();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
@@ -140,6 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                     context,
                     MaterialPageRoute(builder: (context) => RegisterUserPage()),
                   );
+
                 },
                 child: RichText(
                   text: TextSpan(
@@ -185,11 +187,12 @@ class _LoginPageState extends State<LoginPage> {
     if (loginSuccess) {
       final snackBar = _snackbarUtils.showCustomSnackbar('Login efetuado com sucesso!', Colors.green, Colors.white);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      User? user = await _localDataSource.getUserByMail(_emailController.text);
 
       Future.delayed(Duration(seconds: 1), () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage(userId: user?.id)),
         );
       });
     } else {
